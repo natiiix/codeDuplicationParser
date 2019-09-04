@@ -2,7 +2,6 @@
 
 from collections import defaultdict
 from itertools import chain
-from ...utils.benchmark import time_snap
 from ...results.detected_clone import DetectedClone
 from ...results.detection_result import DetectionResult
 
@@ -147,11 +146,7 @@ def chlorine_single_repo(modules):
         DetectionResult -- Result of the code clone detection.
 
     """
-    time_snap("Function started")
-
     nodes = [m[0] for m in modules]
-
-    time_snap("Module lists optimized")
 
     match_dict = defaultdict(set)
     skeleton_weight_dict = {}
@@ -184,8 +179,6 @@ def chlorine_single_repo(modules):
 
         start = end
 
-    time_snap("End of function")
-
     return _dict_to_result(match_dict, skeleton_weight_dict)
 
 
@@ -205,12 +198,8 @@ def chlorine_two_repos(modules1, modules2):
         DetectionResult -- Result of the code clone detection.
 
     """
-    time_snap("Function started")
-
     repo1_nodes = [m[0] for m in modules1]
     repo2_nodes = list(chain.from_iterable(modules2))
-
-    time_snap("Module lists optimized")
 
     match_dict = defaultdict(set)
     skeleton_weight_dict = {}
@@ -240,7 +229,5 @@ def chlorine_two_repos(modules1, modules2):
                     ignore_dict[i] = ignore_set.copy()
 
         start = end
-
-    time_snap("End of function")
 
     return _dict_to_result(match_dict, skeleton_weight_dict)
