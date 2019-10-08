@@ -99,6 +99,16 @@ class TreeNode:
 
         return children
 
+    def type2_pattern(self):
+        """
+        Generate a type 2 pattern for this node.
+
+        This will eliminate all identifiers and literal values.
+
+        """
+        children = " ".join([c.type2_pattern() for c in self.children])
+        return f"{self.node.__class__.__name__}[{children}]"
+
     def __eq__(self, other):
         """
         Compare the node to another node recursively.
