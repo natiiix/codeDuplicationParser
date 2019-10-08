@@ -3,6 +3,7 @@
 import re
 from threading import Thread
 from itertools import chain
+from hashlib import md5
 from fastlog import log
 from psycopg2 import Error as PG_Error
 from easy_postgres import Connection as pg_conn
@@ -20,9 +21,17 @@ _SELECT_REPO_JOIN_STATUS = """SELECT repos.*, states.name AS "status_name", stat
     """FROM repos JOIN states ON (repos.status = states.id) """
 
 
+def _get_md5(s):
+    """
+    Get an MD5 hash of a string.
+
+    """
+    return md5(s.encode('utf-8')).hexdigest()
+
+
 def _get_pattern_id(conn, node):
-    dump = node.dump()
-    dump_md5 = conn.one("""SELECT MD5(%s);""", dump)
+    dump = node.type2_pattern()
+    dump_md5 = _get_md5(dump)
 
     pattern_id = conn.one("""INSERT INTO patterns ("dump", "hash", "weight", "class") """ +
                           """VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING RETURNING id;""",
