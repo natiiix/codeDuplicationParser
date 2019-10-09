@@ -108,6 +108,9 @@ class TreeNode:
         """
         pattern = self.node.__class__.__name__
 
+        if pattern in ["Name", "Str", "Num"]:
+            pattern = "Value"
+
         if self.children:
             child_patterns = [c.type2_pattern() for c in self.children]
             pattern += "[" + " ".join(child_patterns) + "]"
