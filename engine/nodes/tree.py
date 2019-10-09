@@ -106,8 +106,13 @@ class TreeNode:
         This will eliminate all identifiers and literal values.
 
         """
-        children = " ".join([c.type2_pattern() for c in self.children])
-        return f"{self.node.__class__.__name__}[{children}]"
+        pattern = self.node.__class__.__name__
+
+        if self.children:
+            child_patterns = [c.type2_pattern() for c in self.children]
+            pattern += "[" + " ".join(child_patterns) + "]"
+
+        return pattern
 
     def __eq__(self, other):
         """
